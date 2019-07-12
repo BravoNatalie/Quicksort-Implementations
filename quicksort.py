@@ -22,15 +22,15 @@ def mediana(array, begin, end):
     c = array[end-1]
 
     if (a <= b <= c):
-        return b, mid
+        return mid
     if (c <= b <= a):
-        return b, mid
+        return mid
     if (a <= c <= b):
-        return c, end-1
+        return end-1
     if (b <= c <= a):
-        return c, end-1
+        return end-1
 
-    return a, begin
+    return begin
 
 
 def pivotChoosing(array, begin, end, method=1):
