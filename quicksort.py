@@ -6,6 +6,97 @@
 
 import random
 
+global maximum
+
+
+def _lis(arr, n):
+    global maximum
+
+    if n == 1:
+        return 1
+
+    # maxEndingHere is the length of LIS ending with arr[n-1]
+    maxEndingHere = 1
+
+    for i in range(1, n):
+        res = _lis(arr, i)
+        if arr[i - 1] < arr[n - 1] and res + 1 > maxEndingHere:
+            maxEndingHere = res + 1
+
+    # Compare maxEndingHere with overall maximum. And
+    # update the overall maximum if needed
+    maximum = max(maximum, maxEndingHere)
+
+    return maxEndingHere
+
+
+# longest increasing subsequence
+def lis(arr):
+    # to allow the access of global variable
+    global maximum
+
+    n = len(arr)
+    maximum = 1
+    _lis(arr, n)
+
+    return maximum
+
+
+def randomnessLevel(arr):
+    d = 1 - (float(lis(arr)) / len(arr))
+
+    if d < 0.3:
+        return 1
+    elif d <= 0.7:
+        return 2
+    else:
+        return 3
+
+
+# gera instâncias
+def instancesGenerator(arr_size, num_instances):
+    total_instances = 0
+    n_1 = 0  # número de instâncias do tipo 1
+    n_2 = 0  # número de instâncias do tipo 2
+    n_3 = 0  # número de instâncias do tipo 3
+
+    file_1 = open('level_1.txt', 'w+')
+    file_2 = open('level_2.txt', 'w+')
+    file_3 = open('level_3.txt', 'w+')
+
+    while total_instances < 3 * num_instances:
+        arr = random.sample(range(arr_size), arr_size)
+        d = randomnessLevel(arr)
+
+        if d == 1 and n_1 < num_instances:
+            n_1 = n_1 + 1
+            print('Level 1 - instance number = ', n_1)
+            total_instances = total_instances + 1
+            for number in arr:
+                file_1.write(str(number) + ' ')
+            file_1.write('\n')
+
+        elif d == 2 and n_2 < num_instances:
+            n_2 = n_2 + 1
+            print('Level 2 - instance number = ', n_2)
+            total_instances = total_instances + 1
+            for number in arr:
+                file_2.write(str(number) + ' ')
+            file_2.write('\n')
+
+        elif d == 3 and n_3 < num_instances:
+            n_3 = n_3 + 1
+            print('Level 3 - instance number = ', n_3)
+            total_instances = total_instances + 1
+            for number in arr:
+                file_3.write(str(number) + ' ')
+            file_3.write('\n')
+
+    file_1.close()
+    file_2.close()
+    file_3.close()
+
+
 # def findPivot(lista, n1, n2): # algoritmo usado para a 4ª estratégia, está errado e tem q arruamar
 #     pos = n1 + 1
 #     if(pos > n2):
