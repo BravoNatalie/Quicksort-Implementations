@@ -88,3 +88,6 @@ def instance(arr_size):
 
     file_3.close()
 
+instance(100)
+instance(1000)
+instance(10000)
