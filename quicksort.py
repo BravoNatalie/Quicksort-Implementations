@@ -108,8 +108,9 @@ def txtToArray(file):
 
     return array
 
+
 def teste():
-    instancesGenerator(10, 5)
+    instancesGenerator(10, 4)
 
     file_1 = txtToArray('level_1.txt')
     file_2 = txtToArray('level_2.txt')
@@ -117,17 +118,18 @@ def teste():
 
     print(">>> Executing quicksort in file 1: ")
 
-    for i in range(1, 5):
-        print('Method ' + str(i) + ':')
-        teste = file_1
-        for array in teste:
-            print('------Unordered:')
-            print(array)
-            quicksort(array, method=i)
-            print('------Ordered:')
-            print(array)
-            print('\n')
-
+#     for i in range(1, 5):
+#       print('Method ' + str(i) + ':')
+#       teste = file_1
+    i = 1
+    for array in file_1:
+        print('------Unordered:')
+        print(array)
+        quicksort(array, method=i)
+        print('------Method ' + str(i) + ' Ordered:')
+        print(array)
+        print('\n')
+        i = i+1
 
 
 # def findPivot(lista, n1, n2): # algoritmo usado para a 4ª estratégia, está errado e tem q arruamar
@@ -180,16 +182,16 @@ def pivotChoosing(array, begin, end, method):
 
 def partition(array, begin, end, method):
     pivot = pivotChoosing(array, begin, end, method)
-    i = begin
+    i = (begin - 1)
 
-    for j in range(begin, end+1):
+    for j in range(begin, end):
         if (array[j] <= pivot):
-            array[i], array[j] = array[j], array[i]
             i = i+1
+            array[i], array[j] = array[j], array[i]
 
-    array[i], array[end] = array[end], array[i]
+    array[i+1], array[end] = array[end], array[i+1]
 
-    return i
+    return (i+1)
 
 
 def quicksort(array, begin=0, end=None, method=4):
