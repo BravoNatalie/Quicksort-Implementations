@@ -97,6 +97,39 @@ def instancesGenerator(arr_size, num_instances):
     file_3.close()
 
 
+def txtToArray(file):
+    array = list()
+
+    with open(file, 'r') as reader:
+        line = reader.readline().rstrip('\n').split()
+        while len(line) != 0:
+            array.append(line)
+            line = reader.readline().rstrip('\n').split()
+
+    return array
+
+def teste():
+    instancesGenerator(10, 5)
+
+    file_1 = txtToArray('level_1.txt')
+    file_2 = txtToArray('level_2.txt')
+    file_3 = txtToArray('level_3.txt')
+
+    print(">>> Executing quicksort in file 1: ")
+
+    for i in range(1, 5):
+        print('Method ' + str(i) + ':')
+        teste = file_1
+        for array in teste:
+            print('------Unordered:')
+            print(array)
+            quicksort(array, method=i)
+            print('------Ordered:')
+            print(array)
+            print('\n')
+
+
+
 # def findPivot(lista, n1, n2): # algoritmo usado para a 4ª estratégia, está errado e tem q arruamar
 #     pos = n1 + 1
 #     if(pos > n2):
@@ -124,7 +157,7 @@ def mediana(array, begin, end):
     return begin
 
 
-def pivotChoosing(array, begin, end, method=1):
+def pivotChoosing(array, begin, end, method):
     try:
         if (method == 1):
             p = mediana(array, begin, end)
@@ -145,26 +178,34 @@ def pivotChoosing(array, begin, end, method=1):
     return array[end]
 
 
-def partition(array, begin, end):
-    pivot = pivotChoosing(array, begin, end, method=4)
-    i = (begin - 1)
+def partition(array, begin, end, method):
+    pivot = pivotChoosing(array, begin, end, method)
+    i = begin
 
-    for j in range(begin, end):
-        if array[j] <= pivot:
-            i = i+1
+    for j in range(begin, end+1):
+        if (array[j] <= pivot):
             array[i], array[j] = array[j], array[i]
+            i = i+1
 
-    array[i+1], array[end] = array[end], array[i+1]
+    array[i], array[end] = array[end], array[i]
 
-    return (i+1)
+    return i
 
 
-def quicksort(array, begin=0, end=None):
+def quicksort(array, begin=0, end=None, method=4):
     if (end is None):
         end = len(array)-1
     if (begin < end):
-        pivot = partition(array, begin, end)
-        quicksort(array, begin, pivot-1)
-        quicksort(array, pivot+1, end)
+        p = partition(array, begin, end, method)
+        quicksort(array, begin, p-1, method)
+        quicksort(array, p+1, end, method)
     else:
         return
+
+
+def main():
+    teste()
+
+
+if __name__ == "__main__":
+    main()
