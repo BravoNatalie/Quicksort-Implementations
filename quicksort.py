@@ -1,145 +1,36 @@
-# Implementação do Quicksort com as seguintes estratégias de escolha do pivô:
-#   1. mediana (O(n log n));
-#   2. valor aleatório através de distribuição uniforme (O(n log n));
-#   3. média de valores: (primeiro elemento + elemento central + último elemento)/3;
+# DCC001 - Análise de Projeto de Algoritmos
+# Universidade Federal de Juiz de Fora (UFJF) - MG
+#
+# Tema do trabalho: 
+#   Análise de escolhas diferentes de pivô para o algoritmo de ordenação QuickSort.
+#
+#Integrantes do grupo:
+#   1. Ludmila Ribeiro Bôscaro Yung
+#   2. Luís Henrique Simplício Ribeiro
+#   3. Natalie Bravo
+#
+#Implementação do Quicksort com as seguintes estratégias de escolha do pivô:
+#   1. mediana de três;
+#   2. valor aleatório através de distribuição uniforme;
+#   3. média;
 #   4. dada na sala.
 
 import random
-
-global maximum
-
-
-def _lis(arr, n):
-    global maximum
-
-    if n == 1:
-        return 1
-
-    # maxEndingHere is the length of LIS ending with arr[n-1]
-    maxEndingHere = 1
-
-    for i in range(1, n):
-        res = _lis(arr, i)
-        if arr[i - 1] < arr[n - 1] and res + 1 > maxEndingHere:
-            maxEndingHere = res + 1
-
-    # Compare maxEndingHere with overall maximum. And
-    # update the overall maximum if needed
-    maximum = max(maximum, maxEndingHere)
-
-    return maxEndingHere
-
-
-# longest increasing subsequence
-def lis(arr):
-    # to allow the access of global variable
-    global maximum
-
-    n = len(arr)
-    maximum = 1
-    _lis(arr, n)
-
-    return maximum
-
-
-def randomnessLevel(arr):
-    d = 1 - (float(lis(arr)) / len(arr))
-
-    if d < 0.3:
-        return 1
-    elif d <= 0.7:
-        return 2
-    else:
-        return 3
-
-
-# gera instâncias
-def instancesGenerator(arr_size, num_instances):
-    total_instances = 0
-    n_1 = 0  # número de instâncias do tipo 1
-    n_2 = 0  # número de instâncias do tipo 2
-    n_3 = 0  # número de instâncias do tipo 3
-
-    file_1 = open('level_1.txt', 'w+')
-    file_2 = open('level_2.txt', 'w+')
-    file_3 = open('level_3.txt', 'w+')
-
-    while total_instances < 3 * num_instances:
-        arr = random.sample(range(arr_size), arr_size)
-        d = randomnessLevel(arr)
-
-        if d == 1 and n_1 < num_instances:
-            n_1 = n_1 + 1
-            print('Level 1 - instance number = ', n_1)
-            total_instances = total_instances + 1
-            for number in arr:
-                file_1.write(str(number) + ' ')
-            file_1.write('\n')
-
-        elif d == 2 and n_2 < num_instances:
-            n_2 = n_2 + 1
-            print('Level 2 - instance number = ', n_2)
-            total_instances = total_instances + 1
-            for number in arr:
-                file_2.write(str(number) + ' ')
-            file_2.write('\n')
-
-        elif d == 3 and n_3 < num_instances:
-            n_3 = n_3 + 1
-            print('Level 3 - instance number = ', n_3)
-            total_instances = total_instances + 1
-            for number in arr:
-                file_3.write(str(number) + ' ')
-            file_3.write('\n')
-
-    file_1.close()
-    file_2.close()
-    file_3.close()
-
-
-def txtToArray(file):
-    array = list()
-
-    with open(file, 'r') as reader:
-        line = reader.readline().rstrip('\n').split()
-        while len(line) != 0:
-            array.append(line)
-            line = reader.readline().rstrip('\n').split()
-
-    return array
-
-
-def teste():
-    instancesGenerator(10, 4)
-
-    file_1 = txtToArray('level_1.txt')
-    file_2 = txtToArray('level_2.txt')
-    file_3 = txtToArray('level_3.txt')
-
-    print(">>> Executing quicksort in file 1: ")
-
-#     for i in range(1, 5):
-#       print('Method ' + str(i) + ':')
-#       teste = file_1
-    i = 1
-    for array in file_1:
-        print('------Unordered:')
-        print(array)
-        quicksort(array, method=i)
-        print('------Method ' + str(i) + ' Ordered:')
-        print(array)
-        print('\n')
-        i = i+1
-
-
-# def findPivot(lista, n1, n2): # algoritmo usado para a 4ª estratégia, está errado e tem q arruamar
-#     pos = n1 + 1
-#     if(pos > n2):
-#         return 0
-#     if(lista[pos] >= lista[pos-1]):
-#         pos = pos + 1
-#     return pos
-
+import matplotlib.pyplot as plt
+    
+def pivot_aula(array, begin, end):
+    begin = begin + 1
+    r = end
+    while(True):
+        if  begin > end:
+            break
+        if array[begin] >= array[begin -1]:
+            begin = begin +1
+        else:
+            r = begin
+            break
+    
+    return r
 
 def mediana(array, begin, end):
     mid = (begin+end-1)//2
@@ -166,10 +57,9 @@ def pivotChoosing(array, begin, end, method):
         elif (method == 2):
             p = random.randint(begin, end)
         elif (method == 3):
-            p = (begin + len(array)//2 + end)//3
+            p = (begin + end)//2
         elif (method == 4):
-            # não entendi qual era a sugestão do professor e fiz isso por enquanto
-            p = (begin + (end - begin))//2
+            p = pivot_aula(array, begin, end)
         else:
             raise StopIteration
     except StopIteration:
@@ -204,10 +94,36 @@ def quicksort(array, begin=0, end=None, method=4):
     else:
         return
 
+timeRandom = []
+timeMediana = []
+timeMedia = []
+timeSala = []
+lenght = []
+lenghtBigger = []
+elements = [1000, 2000, 3000, 4000, 5000, 7000]
+elementsBigger = [50000, 100000, 200000, 400000, 800000, 1000000]
+
+def graficosAnalise(xl = "Qnt. Elements(und)", yl = "Time(sec)"):
+	
+    plt.subplot(211)
+    plt.title('Análise de escolhas de pivô para o Quicksort', fontsize=20)
+    plt.plot(lenght, timeRandom, label = "Quicksort - Random")
+    plt.plot(lenght, timeMediana, label = "Quicksort - Mediana")
+    plt.plot(lenght, timeMedia, label = "Quicksort - Média")
+    plt.plot(lenght, timeSala, label = "Quicksort - Estratégia feita em sala de aula")
+    legend = plt.legend(loc='upper left', shadow=True)
+    frame = legend.get_frame()
+    frame.set_facecolor('0.90')
+    legend = plt.legend(loc='upper left', shadow=True)
+    frame = legend.get_frame()
+    frame.set_facecolor('0.90')
+	
+    plt.xlabel(xl)
+    plt.ylabel(yl)
+    plt.show()
 
 def main():
-    teste()
-
+    graficosAnalise()
 
 if __name__ == "__main__":
     main()
