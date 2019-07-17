@@ -128,25 +128,25 @@ def graficosAnalise(xl = "Qnt. Elements(und)", yl = "Time(sec)"):
 def main():
     #graficosAnalise()
 
-    criacao_instancias.instance(100)
-    criacao_instancias.instance(1000)
-    criacao_instancias.instance(10000)
-    results.runningTime('results_method_1.txt', 1)
+    # criacao_instancias.instance(100)
+    # criacao_instancias.instance(1000)
+    # criacao_instancias.instance(10000)
+    # results.runningTime('results_method_1.txt', 1)
 
-    criacao_instancias.instance(100)
-    criacao_instancias.instance(1000)
-    criacao_instancias.instance(10000)
-    results.runningTime('results_method_2.txt', 2)
+    # criacao_instancias.instance(100)
+    # criacao_instancias.instance(1000)
+    # criacao_instancias.instance(10000)
+    # results.runningTime('results_method_2.txt', 2)
 
-    criacao_instancias.instance(100)
-    criacao_instancias.instance(1000)
-    criacao_instancias.instance(10000)
-    results.runningTime('results_method_3.txt', 3)
+    # criacao_instancias.instance(100)
+    # criacao_instancias.instance(1000)
+    # criacao_instancias.instance(10000)
+    # results.runningTime('results_method_3.txt', 3)
 
-    criacao_instancias.instance(100)
-    criacao_instancias.instance(1000)
-    criacao_instancias.instance(10000)
-    results.runningTime('results_method_4.txt', 4)
+    # criacao_instancias.instance(100)
+    # criacao_instancias.instance(1000)
+    # criacao_instancias.instance(10000)
+    # results.runningTime('results_method_4.txt', 4)
 
 
 if __name__ == "__main__":
